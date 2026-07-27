@@ -1,0 +1,14 @@
+.layout {
+  min-height: 100vh;
+}
+
+.header {
+  height: auto;
+  line-height: normal;
+  padding: 0;
+  background-color: var(--ant-color-bg-container);
+}
+
+.content {
+  padding: 20px 0;
+}
