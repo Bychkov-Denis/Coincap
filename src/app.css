@@ -3,7 +3,28 @@ body {
 }
 
 .container {
-  max-width: 840px;
+  max-width: 940px;
   padding: 0 20px;
   margin: 0 auto;
+}
+
+.color-primary {
+  color: var(--ant-color-primary);
+}
+
+.color-success {
+  color: var(--ant-color-success);
+}
+
+.color-danger {
+  color: var(--ant-color-error);
+}
+
+.icon {
+  cursor: pointer;
+  font-size: 18px;
+
+  &:hover {
+    color: var(--ant-color-primary);
+  }
 }

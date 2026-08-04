@@ -1,13 +1,13 @@
 import { Route, Routes } from 'react-router-dom';
-import CryptoList from '..//pages/CryptoList';
 import MainLayout from '../layout/mainLayout/MainLayout';
 import CoinPage from '../pages/CoinPage';
+import MainPage from '../pages/MainPage';
 
 const AppRouter = () => {
   return (
     <Routes>
       <Route path="/" element={<MainLayout />}>
-        <Route index element={<CryptoList />} />
+        <Route index element={<MainPage />} />
         <Route path="/coin/:id" element={<CoinPage />} />
       </Route>
     </Routes>

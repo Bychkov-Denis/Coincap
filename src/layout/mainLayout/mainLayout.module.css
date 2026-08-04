@@ -5,7 +5,7 @@
 .header {
   height: auto;
   line-height: normal;
-  padding: 0;
+  padding: 10px 0;
   background-color: var(--ant-color-bg-container);
 }
 

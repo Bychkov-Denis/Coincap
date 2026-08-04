@@ -2,6 +2,7 @@ import { Flex, Layout } from 'antd';
 import { Content, Header } from 'antd/es/layout/layout';
 
 import { Outlet } from 'react-router-dom';
+import TopCoins from '../../components/TopCoins';
 import styles from './mainLayout.module.css';
 
 const MainLayout = () => {
@@ -10,8 +11,7 @@ const MainLayout = () => {
       <Header className={styles.header}>
         <div className="container">
           <Flex justify="space-between" align="center">
-            <p>TopCoins</p>
-            <p>PortfolioSummary</p>
+            <TopCoins />
           </Flex>
         </div>
       </Header>
