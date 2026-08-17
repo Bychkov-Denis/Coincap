@@ -8,6 +8,14 @@ body {
   margin: 0 auto;
 }
 
+.container-flex-center {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .color-primary {
   color: var(--ant-color-primary);
 }

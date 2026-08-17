@@ -1,14 +1,11 @@
 import { PlusCircleOutlined } from '@ant-design/icons';
 import { Table } from 'antd';
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { getAllCoins, selectedCoins } from '../redux/coinSlice';
-import { formatMarketCap, formatPriceChange } from '../utils/utils';
+import { selectedCoins } from '../redux/coinSlice';
+import { formatMoneyShort, formatPriceChange } from '../utils/utils';
 
 const CoinTable = () => {
-  const dispatch = useDispatch();
-
   const coins = useSelector(selectedCoins);
 
   const navigate = useNavigate();
@@ -51,13 +48,13 @@ const CoinTable = () => {
       title: 'Market Cap',
       dataIndex: 'marketCap',
       key: 'marketCap',
-      render: marketCap => formatMarketCap(marketCap),
+      render: marketCap => formatMoneyShort(marketCap),
     },
     {
       title: 'Price',
       dataIndex: 'price',
       key: 'price',
-      render: price => formatMarketCap(price),
+      render: price => formatMoneyShort(price),
     },
     {
       title: '',
@@ -72,14 +69,6 @@ const CoinTable = () => {
       },
     },
   ];
-
-  const getCoins = () => {
-    dispatch(getAllCoins());
-  };
-
-  useEffect(() => {
-    getCoins();
-  }, []);
 
   return (
     <div className="container">
@@ -97,7 +86,7 @@ const CoinTable = () => {
           responsive: true,
           showSizeChanger: true,
           showQuickJumper: true,
-          position: ['bottomCenter'],
+          placement: ['bottomCenter'],
         }}
       />
     </div>

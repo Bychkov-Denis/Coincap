@@ -12,7 +12,7 @@ const TopCoins = () => {
       <Text underline>Популярные криптовалюты</Text>
       <Flex justify="center" gap="large">
         {topCoins.map(coin => (
-          <Flex vertical>
+          <Flex vertical key={coin.id}>
             <Text strong>{coin.name}</Text>
             <Text>{`${coin.price.toFixed(2)} $`}</Text>
           </Flex>

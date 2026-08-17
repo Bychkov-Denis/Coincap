@@ -16,7 +16,7 @@ export const formatPriceChange = price => {
   };
 };
 
-export const formatMarketCap = (value, currency = '$', decimals = 1) => {
+export const formatMoneyShort = (value, currency = '$', decimals = 1) => {
   if (value === undefined || value === null || isNaN(value)) {
     return '—';
   }
