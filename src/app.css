@@ -16,6 +16,11 @@ body {
   align-items: center;
 }
 
+.container-form {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
 .color-primary {
   color: var(--ant-color-primary);
 }

@@ -1,14 +1,19 @@
 import { PlusCircleOutlined } from '@ant-design/icons';
 import { Table } from 'antd';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { selectedCoins } from '../redux/coinSlice';
 import { formatMoneyShort, formatPriceChange } from '../utils/utils';
+import BuyCoinModal from './BuyCoinModal';
 
 const CoinTable = () => {
   const coins = useSelector(selectedCoins);
 
   const navigate = useNavigate();
+
+  const [selectedCoin, setSelectedCoin] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleRowClick = record => {
     const coinId = record.id;
@@ -17,7 +22,13 @@ const CoinTable = () => {
 
   const handleAddCoin = (e, record) => {
     e.stopPropagation();
-    console.log(record);
+    setSelectedCoin(record);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedCoin(null);
   };
 
   const columns = [
@@ -88,6 +99,11 @@ const CoinTable = () => {
           showQuickJumper: true,
           placement: ['bottomCenter'],
         }}
+      />
+      <BuyCoinModal
+        coin={selectedCoin}
+        open={isModalOpen}
+        onClose={handleCloseModal}
       />
     </div>
   );

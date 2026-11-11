@@ -5,7 +5,20 @@ import {
   isPending,
   isRejected,
 } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
 import { coinService } from '../services/coinService.js';
+
+const PORTFOLIO_ITEMS_KEY = 'portfolioItems';
+
+const loadPortfolioFromLS = () => {
+  try {
+    const portfolioItems = localStorage.getItem(PORTFOLIO_ITEMS_KEY);
+    return portfolioItems ? JSON.parse(portfolioItems) : [];
+  } catch (error) {
+    toast.error('Ошибка загрузки портфеля: ', error);
+    return [];
+  }
+};
 
 const initialState = {
   coins: [],
@@ -14,7 +27,7 @@ const initialState = {
   currentCoin: null,
 
   portfolio: {
-    items: [],
+    items: loadPortfolioFromLS(),
     currentPrice: 0,
     prevPrice: 0,
     changePrice: 0,
@@ -60,18 +73,19 @@ export const getCoinDetails = createAsyncThunk(
       const marketData = coinData.market_data;
 
       return {
+        price: marketData?.current_price.usd.toFixed(2),
         symbol: coinData.symbol.toUpperCase(),
         name: coinData.name,
         circulatingSupply: marketData?.circulating_supply.toFixed(2),
         totalSupply: marketData?.total_supply.toFixed(2),
-        totalVolume: marketData?.total_volume?.usd,
+        totalVolume: marketData?.total_volume?.usd.toFixed(2),
         vwap24: (() => {
           const high = marketData?.high_24h?.usd;
           const low = marketData?.low_24h?.usd;
           const price = marketData?.current_price?.usd;
           return ((high + low + price) / 3).toFixed(2);
         })(),
-        priceChange24h: marketData?.price_change_percentage_24h.toFixed(2),
+        priceChange24h: marketData?.price_change_percentage_24h,
         homepage: coinData.links?.homepage?.[0],
       };
     } catch (error) {
@@ -112,7 +126,7 @@ export const updatePortfolioValue = createAsyncThunk(
       items.forEach(item => {
         const currentCoinPrice = currentPrices[item.coinId];
         currentPrice += item.amount * currentCoinPrice;
-        prevPrice += item.amount * item.buyPrice;
+        prevPrice += item.amount * item.price;
       });
 
       const changePrice = currentPrice - prevPrice;
@@ -160,7 +174,7 @@ export const getCoinHistory = createAsyncThunk(
       });
 
       const chartData = Array.from(dayMap.entries()).map(([key, prices]) => {
-        const date = new Date(key).toLocaleDateString('en-US', {
+        const date = new Date(key).toLocaleDateString('ru-RU', {
           month: 'short',
           day: 'numeric',
         });
@@ -187,7 +201,20 @@ export const getCoinHistory = createAsyncThunk(
 export const coinSlice = createSlice({
   name: 'coins',
   initialState,
-  reducers: {},
+  reducers: {
+    addPortfolioItem: (state, action) => {
+      state.portfolio.items.push(action.payload);
+
+      try {
+        localStorage.setItem(
+          PORTFOLIO_ITEMS_KEY,
+          JSON.stringify(state.portfolio.items),
+        );
+      } catch (error) {
+        toast.error('Ошибка сохранения в портфель: ', error);
+      }
+    },
+  },
   extraReducers: builder => {
     builder.addCase(getAllCoins.fulfilled, (state, action) => {
       state.coins = action.payload;
@@ -196,7 +223,7 @@ export const coinSlice = createSlice({
       state.currentCoin = action.payload;
     });
     builder.addCase(updatePortfolioValue.fulfilled, (state, action) => {
-      state.portfolio = action.payload;
+      state.portfolio = { ...state.portfolio, ...action.payload };
     });
     builder.addCase(getCoinHistory.fulfilled, (state, action) => {
       state.history.data = action.payload.chartData;
@@ -228,6 +255,7 @@ export const coinSlice = createSlice({
   },
 });
 
+export const { addPortfolioItem } = coinSlice.actions;
 export const {
   selectedCoins,
   selectedCurrentCoin,

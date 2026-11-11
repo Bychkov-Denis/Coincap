@@ -1,8 +1,8 @@
-export const formatPriceChange = price => {
+export const formatPriceChange = (price, symbol = '$') => {
   if (!price) {
     return {
       text: '0.00 $',
-      className: 'color-success',
+      className: null,
     };
   }
 
@@ -11,7 +11,7 @@ export const formatPriceChange = price => {
   const isPositivePrice = formattedPrice >= 0;
 
   return {
-    text: `${formattedPrice.toFixed(2)} $`,
+    text: `${formattedPrice.toFixed(2)} ${symbol}`,
     className: isPositivePrice ? 'color-success' : 'color-danger',
   };
 };
